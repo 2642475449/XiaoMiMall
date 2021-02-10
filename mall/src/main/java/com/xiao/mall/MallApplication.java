@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-@MapperScan(basePackages = "com.xiao.mall")
-
+@MapperScan(basePackages = "com.xiao.mall.dao")
 public class MallApplication {
 
     public static void main(String[] args) {
