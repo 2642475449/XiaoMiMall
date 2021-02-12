@@ -16,6 +16,9 @@ import java.util.Objects;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)//有些数据返回时，字段的返回值为null时去掉
 public class ResponseVo<T> {
 
+    /**
+     * 状态
+     */
     private Integer status;
 
     private String msg;
