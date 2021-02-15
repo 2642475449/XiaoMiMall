@@ -33,6 +33,5 @@ public class UserServiceImplTest extends MallApplicationTests {
          * 断言,主用于比较测试传递进去的两个参数
          */
         Assert.assertEquals(ResponseEnum.SUCCESS.getCode(),responseVo.getStatus());
-
     }
 }

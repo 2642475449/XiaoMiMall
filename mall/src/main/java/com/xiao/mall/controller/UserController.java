@@ -33,30 +33,25 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    //注册
+    /**
+     * 注册
+     */
     @PostMapping("/user/register")
-    public ResponseVo register(@Valid @RequestBody UserRegisterForm userRegisterForm, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            log.error("注册提交的参数有误，{}", Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-            return ResponseVo.error(PARAM_ERROR,bindingResult);
-        }
+    public ResponseVo register(@Valid @RequestBody UserRegisterForm userRegisterForm) {
         User user = new User();
         BeanUtils.copyProperties(userRegisterForm,user);
         return userService.register(user);
     }
 
     /**
-     *
+     * 用户登陆
      * @param userLoginForm
      * @param bindingResult
      * @param session
      * @return
      */
     @PostMapping("/user/login")
-    public ResponseVo<User> login(@Valid @RequestBody UserLoginForm userLoginForm, BindingResult bindingResult,  HttpSession session) {
-        if (bindingResult.hasErrors()) {
-            return ResponseVo.error(PARAM_ERROR,bindingResult);
-        }
+    public ResponseVo<User> login(@Valid @RequestBody UserLoginForm userLoginForm, HttpSession session) {
 
         ResponseVo<User> userResponseVo = userService.login(userLoginForm.getUsername(), userLoginForm.getPassword());
         

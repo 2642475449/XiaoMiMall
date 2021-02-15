@@ -2,9 +2,13 @@ package com.xiao.mall.exception;
 
 import com.xiao.mall.enums.ResponseEnum;
 import com.xiao.mall.vo.ResponseVo;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Objects;
 
 /**
  * @author ：降蓝
@@ -24,6 +28,15 @@ public class RuntimeExceptionHandler {
     @ResponseBody
     public ResponseVo userLoginHandle() {
        return ResponseVo.error(ResponseEnum.NEED_LOGIN);
+   }
+
+   @ExceptionHandler(MethodArgumentNotValidException.class)
+   @ResponseBody
+    public ResponseVo notValidException(MethodArgumentNotValidException e) {
+       BindingResult bindingResult = e.getBindingResult();
+       Objects.requireNonNull(bindingResult.getFieldError());
+       return ResponseVo.error(ResponseEnum.PARAM_ERROR,
+               bindingResult.getFieldError().getField() + " =========================== " + bindingResult.getFieldError().getDefaultMessage());
    }
 
 }
