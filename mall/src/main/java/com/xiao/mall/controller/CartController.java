@@ -47,7 +47,6 @@ public class CartController {
     @PostMapping("/carts")
     public ResponseVo<CartVo> add(@Valid @RequestBody CartAddForm cartAddForm, HttpSession session) {
         User user = (User)session.getAttribute(MallConst.CURRENT_USER);
-
         return cartService.add(user.getId(),cartAddForm);
     }
 
@@ -97,14 +96,19 @@ public class CartController {
      * @param session
      * @return
      */
-    @PutMapping("/carts/unselectAll")
+    @PutMapping("/carts/unSelectAll")
     public ResponseVo<CartVo> unSelectAll(HttpSession session) {
         User user = (User) session.getAttribute(MallConst.CURRENT_USER);
         return cartService.unselectAll(user.getId());
     }
 
+    /**
+     * 获取购物中所有商品数量总和
+     * @param session
+     * @return
+     */
     @GetMapping("/carts/products/sum")
-    public ResponseVo<CartVo> sum(HttpSession session) {
+    public ResponseVo<Integer> sum(HttpSession session) {
         User user = (User) session.getAttribute(MallConst.CURRENT_USER);
         return cartService.sum(user.getId());
     }
