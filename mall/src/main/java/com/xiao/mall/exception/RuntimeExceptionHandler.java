@@ -18,14 +18,20 @@ import java.util.Objects;
 @ControllerAdvice
 public class RuntimeExceptionHandler {
 
-    @ExceptionHandler(RuntimeException.class)
+    /**
+     *全局异常捕捉处理
+     *
+     * @param e
+     * @return
+     */
     @ResponseBody
+    @ExceptionHandler(RuntimeException.class)
 //    @ResponseStatus(HttpStatus.FORBIDDEN)//更改状态码为403
     public ResponseVo handle(RuntimeException e) {
         return ResponseVo.error(ResponseEnum.ERROR,e.getMessage());
     }
-   @ExceptionHandler(UserLoginException.class)
     @ResponseBody
+   @ExceptionHandler(UserLoginException.class)
     public ResponseVo userLoginHandle() {
        return ResponseVo.error(ResponseEnum.NEED_LOGIN);
    }
@@ -36,7 +42,7 @@ public class RuntimeExceptionHandler {
        BindingResult bindingResult = e.getBindingResult();
        Objects.requireNonNull(bindingResult.getFieldError());
        return ResponseVo.error(ResponseEnum.PARAM_ERROR,
-               bindingResult.getFieldError().getField() + " =========================== " + bindingResult.getFieldError().getDefaultMessage());
+               bindingResult.getFieldError().getField()  + bindingResult.getFieldError().getDefaultMessage());
    }
 
 }
