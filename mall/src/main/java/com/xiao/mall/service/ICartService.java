@@ -2,8 +2,11 @@ package com.xiao.mall.service;
 
 import com.xiao.mall.form.CartAddForm;
 import com.xiao.mall.form.CartUpdateForm;
+import com.xiao.mall.pojo.Cart;
 import com.xiao.mall.vo.CartVo;
 import com.xiao.mall.vo.ResponseVo;
+
+import java.util.List;
 
 /**
  * 购物车业务层
@@ -62,4 +65,6 @@ public interface ICartService {
      * @return
      */
     ResponseVo<Integer> sum(Integer uid);
+
+    List<Cart> listForCart(Integer uid);
 }

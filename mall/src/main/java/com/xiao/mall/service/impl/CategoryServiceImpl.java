@@ -53,7 +53,7 @@ public class CategoryServiceImpl implements ICategoryService {
          *  (findSubCategory)查询二级目录三级目录等
          */
         List<CategoryVo> categoryVoList = categories.stream()
-                .filter(e -> e.getParentId().equals(ROOT_PARENT_ID))
+                .filter(e -> e.getParentId().equals(ROOT_PARENT_ID))//查询一级目录
                 .map(this::category2CategoryVo)
                 .sorted(Comparator.comparing(CategoryVo::getParentId).reversed())
                 .collect(Collectors.toList());
@@ -76,8 +76,8 @@ public class CategoryServiceImpl implements ICategoryService {
     /**
      * 查询子目录
      * @param id
-     * @param resultSet
-     * @param categories
+     * @param resultSet  上级目录
+     * @param categories 所有数据
      */
     private void findSubCategoryId(Integer id, Set<Integer> resultSet, List<Category> categories) {
         for (Category category : categories) {
@@ -93,8 +93,8 @@ public class CategoryServiceImpl implements ICategoryService {
 
     /**
      *  使用递归直接调用自身的一种方法
-     * @param categoryVoList
-     * @param categories
+     * @param categoryVoList 上级目录
+     * @param categories     所有目录
      */
     private void findSubCategory(List<CategoryVo> categoryVoList,List<Category> categories) {
         for (CategoryVo categoryVo : categoryVoList) {

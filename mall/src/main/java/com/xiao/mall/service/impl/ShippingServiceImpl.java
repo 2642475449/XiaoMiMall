@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.xiao.mall.dao.ShippingMapper;
 import com.xiao.mall.enums.ResponseEnum;
 import com.xiao.mall.form.ShippingForm;
+import com.xiao.mall.form.ShippingFormUpdate;
 import com.xiao.mall.pojo.Shipping;
 import com.xiao.mall.service.IShippingService;
 import com.xiao.mall.vo.ResponseVo;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.xiao.mall.enums.ResponseEnum.*;
 
 /**
  * @author ：降蓝
@@ -47,7 +50,7 @@ public class ShippingServiceImpl implements IShippingService {
         }
         Map<String,Integer> map = new HashMap<>();
         map.put("shippingId",shipping.getId());
-        return ResponseVo.success(map);
+        return ResponseVo.success(NEW_ADDRESS_SUCCESSFUL.getDesc(),map);
     }
 
     /**
@@ -65,7 +68,7 @@ public class ShippingServiceImpl implements IShippingService {
             return ResponseVo.error(ResponseEnum.DELETE_SHIPPING_FAIL);
         }
 
-        return ResponseVo.success();
+        return ResponseVo.success(DELETE_SHIPPING_SUCCESSFUL.getDesc());
     }
 
     /**
@@ -86,7 +89,7 @@ public class ShippingServiceImpl implements IShippingService {
         if (row == 0) {
             return ResponseVo.error(ResponseEnum.ERROR);
         }
-        return ResponseVo.success();
+        return ResponseVo.success(UPDATE_ADDRESS_SUCCESSFUL.getDesc());
     }
 
     /**

@@ -103,101 +103,149 @@ public class CartServiceImpl implements ICartService {
      */
     @Override
     public ResponseVo<CartVo> list(Integer uid) {
-        //保存当前购物车商品的ID
-        Set<Integer> productIdSet = new HashSet<>();
-        boolean selectAll = true;
-        Integer cartTotalQuantity = 0;
-        BigDecimal cartTotalPrice = BigDecimal.ZERO;
-        CartVo cartVo = new CartVo();
-        List<CartProductVo> cartProductVoList = new ArrayList<>();
-        //当前购物车商品的数量
-        HashMap<Integer, Integer> quantityTotal = new HashMap<>();
-        //当前购物车是否选中
-        HashMap<Object, Boolean> isSelected = new HashMap<>();
-
-        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
-        //得到Redis 购物车id
-        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
-        // 获取变量中的键值对
-        Map<String, String> entries = opsForHash.entries(redisKey);
-
-//        遍历购物车
-        for (Map.Entry<String, String> entry : entries.entrySet()) {
-            //得到id
-            Integer productId = Integer.valueOf(entry.getKey());
-            //得到value
-            Cart cart = gson.fromJson(entry.getValue(), Cart.class);
-            productIdSet.add(productId);
-            //当前购物车是否选中
-            isSelected.put(productId,cart.getProductSelected());
-            //当前购物车商品的数量
-            quantityTotal.put(productId,cart.getQuantity());
-//            //TODO 需要优化，使用mysql里的in
-//            Product product = productMapper.selectByPrimaryKey(productId);
-//            if (product != null) {
-//                //有MySQL 和 redis 的数据
-//                CartProductVo cartProductVo = new CartProductVo(productId,
-//                        cart.getQuantity(),
+//        //保存当前购物车商品的ID
+//        Set<Integer> productIdSet = new HashSet<>();
+//        boolean selectAll = true;
+//        Integer cartTotalQuantity = 0;
+//        BigDecimal cartTotalPrice = BigDecimal.ZERO;
+//        CartVo cartVo = new CartVo();
+//        List<CartProductVo> cartProductVoList = new ArrayList<>();
+//        //当前购物车商品的数量
+//        HashMap<Integer, Integer> quantityTotal = new HashMap<>();
+//        //当前购物车是否选中
+//        HashMap<Object, Boolean> isSelected = new HashMap<>();
+//
+//        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+//        //得到Redis 购物车id
+//        String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+//        // 获取变量中的键值对
+//        Map<String, String> entries = opsForHash.entries(redisKey);
+//
+////        遍历购物车
+//        for (Map.Entry<String, String> entry : entries.entrySet()) {
+//            //得到id
+//            Integer productId = Integer.valueOf(entry.getKey());
+//            //得到value
+//            Cart cart = gson.fromJson(entry.getValue(), Cart.class);
+//            productIdSet.add(productId);
+//            //当前购物车是否选中
+//            isSelected.put(productId,cart.getProductSelected());
+//            //当前购物车商品的数量
+//            quantityTotal.put(productId,cart.getQuantity());
+////            //TODO 需要优化，使用mysql里的in
+////            Product product = productMapper.selectByPrimaryKey(productId);
+////            if (product != null) {
+////                //有MySQL 和 redis 的数据
+////                CartProductVo cartProductVo = new CartProductVo(productId,
+////                        cart.getQuantity(),
+////                        product.getName(),
+////                        product.getSubtitle(),
+////                        product.getMainImage(),
+////                        product.getPrice(),
+////                        product.getStatus(),
+////                        product.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
+////                        product.getStock(),
+////                        cart.getProductSelected()
+////                        );
+////
+////                cartProductVoList.add(cartProductVo);
+////                //是否全选
+////                if (!cart.getProductSelected()) {
+////                    selectAll = false;
+////                }
+////
+////                cartTotalQuantity += cart.getQuantity();
+////
+////
+////            }
+//        }
+//        //保存ID
+//        List<Product> products = productMapper.selectByProductIdSet(productIdSet);
+//        //根据购物车的所有商品id查询出商品详情
+//        for (Product product : products) {
+//            if (product.getId() != null) {
+//                CartProductVo cartProductVo = new CartProductVo(product.getId(),
+//                        quantityTotal.get(product.getId()),
 //                        product.getName(),
 //                        product.getSubtitle(),
 //                        product.getMainImage(),
 //                        product.getPrice(),
 //                        product.getStatus(),
-//                        product.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
+//                        product.getPrice().multiply(BigDecimal.valueOf(quantityTotal.get(product.getId()))),
 //                        product.getStock(),
-//                        cart.getProductSelected()
-//                        );
+//                        isSelected.get(product.getId()));
 //
+//                //查询后加入List
 //                cartProductVoList.add(cartProductVo);
+//                //购物车中商品总数量
+//                cartTotalQuantity += cartProductVo.getQuantity();
+//                //计算总价(只计算选中的)
+//                if (isSelected.get(product.getId())) {
+//                    cartTotalPrice =  cartTotalPrice.add(cartProductVo.getProductTotalPrice());
+//                }
 //                //是否全选
-//                if (!cart.getProductSelected()) {
+//                if (!isSelected.get(product.getId())) {
 //                    selectAll = false;
 //                }
 //
-//                cartTotalQuantity += cart.getQuantity();
-//
-//
 //            }
-        }
-        //保存ID
-        List<Product> products = productMapper.selectByProductIdSet(productIdSet);
-        //根据购物车的所有商品id查询出商品详情
-        for (Product product : products) {
-            if (product.getId() != null) {
-                CartProductVo cartProductVo = new CartProductVo(product.getId(),
-                        quantityTotal.get(product.getId()),
+//        }
+//
+//        //有一个没有选中，就不是全选
+//        cartVo.setSelectedAll(selectAll);
+//        //购物车总金额
+//        cartVo.setCartTotalPrice(cartTotalPrice);
+//        //购物车中商品总数量
+//        cartVo.setCartTotalQuantity(cartTotalQuantity);
+//        //将list加入购物车api
+//        cartVo.setCartProductVoList(cartProductVoList);
+//        return ResponseVo.success(cartVo);
+        HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+        String redisKey  = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+        Map<String, String> entries = opsForHash.entries(redisKey);
+
+        boolean selectAll = true;
+        Integer cartTotalQuantity = 0;
+        BigDecimal cartTotalPrice = BigDecimal.ZERO;
+        CartVo cartVo = new CartVo();
+        List<CartProductVo> cartProductVoList = new ArrayList<>();
+        for (Map.Entry<String, String> entry : entries.entrySet()) {
+            Integer productId = Integer.valueOf(entry.getKey());
+            Cart cart = gson.fromJson(entry.getValue(), Cart.class);
+
+            //TODO 需要优化，使用mysql里的in
+            Product product = productMapper.selectByPrimaryKey(productId);
+            if (product != null) {
+                CartProductVo cartProductVo = new CartProductVo(productId,
+                        cart.getQuantity(),
                         product.getName(),
                         product.getSubtitle(),
                         product.getMainImage(),
                         product.getPrice(),
                         product.getStatus(),
-                        product.getPrice().multiply(BigDecimal.valueOf(quantityTotal.get(product.getId()))),
+                        product.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
                         product.getStock(),
-                        isSelected.get(product.getId()));
-
-                //查询后加入List
+                        cart.getProductSelected()
+                );
                 cartProductVoList.add(cartProductVo);
-                //购物车中商品总数量
-                cartTotalQuantity += cartProductVo.getQuantity();
-                //计算总价(只计算选中的)
-                if (isSelected.get(product.getId())) {
-                    cartTotalPrice =  cartTotalPrice.add(cartProductVo.getProductTotalPrice());
-                }
-                //是否全选
-                if (!isSelected.get(product.getId())) {
+
+                if (!cart.getProductSelected()) {
                     selectAll = false;
                 }
 
+                //计算总价(只计算选中的)
+                if (cart.getProductSelected()) {
+                    cartTotalPrice = cartTotalPrice.add(cartProductVo.getProductTotalPrice());
+                }
             }
+
+            cartTotalQuantity += cart.getQuantity();
         }
 
-        //有一个没有选中，就不是全选
+        //有一个没有选中，就不叫全选
         cartVo.setSelectedAll(selectAll);
-        //购物车总金额
-        cartVo.setCartTotalPrice(cartTotalPrice);
-        //购物车中商品总数量
         cartVo.setCartTotalQuantity(cartTotalQuantity);
-        //将list加入购物车api
+        cartVo.setCartTotalPrice(cartTotalPrice);
         cartVo.setCartProductVoList(cartProductVoList);
         return ResponseVo.success(cartVo);
     }
@@ -306,7 +354,7 @@ public class CartServiceImpl implements ICartService {
         return ResponseVo.success(sum);
     }
 
-    private List<Cart> listForCart(Integer uid) {
+    public List<Cart> listForCart(Integer uid) {
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
         //得到Redis 购物车id
         String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
