@@ -3,9 +3,9 @@ package com.xiao.mall.service;
 import com.xiao.mall.MallApplicationTests;
 import com.xiao.mall.enums.ResponseEnum;
 import com.xiao.mall.form.ShippingForm;
+import com.xiao.mall.form.ShippingFormUpdate;
 import com.xiao.mall.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +25,8 @@ public class IShippingServiceTest extends MallApplicationTests {
 
     private ShippingForm form;
 
+    private ShippingFormUpdate formUpdate;
+
     Integer shippingId;
 
     @Before
@@ -40,6 +42,7 @@ public class IShippingServiceTest extends MallApplicationTests {
         form.setReceiverZip("10000");
         this.form = form;
 
+
         add();
     }
 
@@ -51,13 +54,13 @@ public class IShippingServiceTest extends MallApplicationTests {
         Assert.assertEquals(ResponseEnum.SUCCESS.getCode(),responseVo.getStatus());
     }
 
-    @After
-    public void delete() {
-
-        ResponseVo responseVo = shippingService.delete(uid, shippingId);
-        log.info("result={}",responseVo);
-        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(),responseVo.getStatus());
-    }
+//    @After
+//    public void delete() {
+//
+//        ResponseVo responseVo = shippingService.delete(uid, shippingId);
+//        log.info("result={}",responseVo);
+//        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(),responseVo.getStatus());
+//    }
 
     @Test
     public void update() {
