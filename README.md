@@ -6,6 +6,33 @@
 
 ![](http://jianglan.ltd/wp-content/uploads/2021/02/Snipaste_2021-02-21_23-03.png)
 
+## 功能演示
+
+### 登录模块
+
+![image-20210222122621788](http://jianglan.ltd/wp-content/uploads/2021/02/image-20210222122621788.png)
+
+### 商品模块
+
+![image-20210222122710397](http://jianglan.ltd/wp-content/uploads/2021/02/image-20210222122710397.png)
+
+### 购物车模块
+
+![image-20210222122808470](http://jianglan.ltd/wp-content/uploads/2021/02/image-20210222122808470.png)
+
+### 订单模块
+
+![image-20210222122442052](http://jianglan.ltd/wp-content/uploads/2021/02/image-20210222122442052.png)
+
+### 支付模块
+
+![image-20210222122530295](http://jianglan.ltd/wp-content/uploads/2021/02/image-20210222122530295.png)
+
+
+
+[体验入口](http://47.110.82.125/#/index)
+
+用户名与密码为：admin
 ## 开发工具
 
 IntelliJ IDEA + Navicat + Sublime Text3 + Git + Chrome
