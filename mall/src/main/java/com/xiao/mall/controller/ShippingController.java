@@ -2,6 +2,7 @@ package com.xiao.mall.controller;
 
 import com.xiao.mall.consts.MallConst;
 import com.xiao.mall.form.ShippingForm;
+import com.xiao.mall.form.ShippingFormUpdate;
 import com.xiao.mall.pojo.Shipping;
 import com.xiao.mall.pojo.User;
 import com.xiao.mall.service.IShippingService;
@@ -35,8 +36,17 @@ public class ShippingController {
         return shippingService.delete(user.getId(),shippingId);
     }
 
+    /**
+     * 更新
+     * @param shippingId
+     * @param form
+     * @param session
+     * @return
+     */
     @PutMapping("/shippings/{shippingId}")
-    public ResponseVo update(@PathVariable Integer shippingId, @Valid @RequestBody ShippingForm form, HttpSession session) {
+    public ResponseVo update(@PathVariable Integer shippingId,
+                             @Valid @RequestBody ShippingForm form,
+                             HttpSession session) {
         User user = (User) session.getAttribute(MallConst.CURRENT_USER);
         return shippingService.update(user.getId(),shippingId,form);
     }

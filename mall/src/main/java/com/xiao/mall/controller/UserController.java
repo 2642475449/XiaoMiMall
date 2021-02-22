@@ -46,7 +46,6 @@ public class UserController {
     /**
      * 用户登陆
      * @param userLoginForm
-     * @param bindingResult
      * @param session
      * @return
      */
@@ -73,7 +72,7 @@ public class UserController {
         return ResponseVo.success(user);
     }
 
-    //TODO 判断登录状态
+    // 判断登录状态
     @PostMapping("/user/logout")
     /**
      * {@link org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory}
