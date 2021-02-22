@@ -1,5 +1,6 @@
 package com.xiao.pay.service.impl;
 
+import com.google.gson.Gson;
 import com.lly835.bestpay.config.WxPayConfig;
 import com.lly835.bestpay.enums.BestPayPlatformEnum;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
@@ -13,6 +14,7 @@ import com.xiao.pay.enums.PayPlatformEnum;
 import com.xiao.pay.pojo.PayInfo;
 import com.xiao.pay.service.IPayService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +27,18 @@ import java.math.BigDecimal;
  */
 @Slf4j
 @Service
-public class PayService implements IPayService {
+public class PayServiceImpl implements IPayService {
+
+    private final static String QUEUE_PAY_NOTIFY = "payNotify";
 
     @Autowired
     private BestPayService bestPayService;
 
     @Autowired
     private PayInfoMapper payInfoMapper;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     /**
      * 创建/发动支付
@@ -51,7 +58,7 @@ public class PayService implements IPayService {
         payInfoMapper.insertSelective(payInfo);
 
         PayRequest request = new PayRequest();
-        request.setOrderName("9071992-最好的支付sdk");//订单名字
+        request.setOrderName("9071992-仿小米商城");//订单名字
         request.setOrderId(orderId);//订单号
         request.setOrderAmount(amount.doubleValue());//订单总额
         request.setPayTypeEnum(bestPayTypeEnum);//支付方式
@@ -97,6 +104,7 @@ public class PayService implements IPayService {
         payInfoMapper.updateByPrimaryKeySelective(payInfo);
 
         //TODO pay发送MQ消息,mall接受MQ消息
+        amqpTemplate.convertAndSend(QUEUE_PAY_NOTIFY,new Gson().toJson(payInfo));
 
         //4.告诉支付平台不要再通知了
         if (payResponse.getPayPlatformEnum() == BestPayPlatformEnum.WX) {

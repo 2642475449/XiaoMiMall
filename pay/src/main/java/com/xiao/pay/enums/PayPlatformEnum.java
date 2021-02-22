@@ -22,12 +22,6 @@ public enum  PayPlatformEnum {
     }
 
     public static PayPlatformEnum getByBestPayTypeEnum(BestPayTypeEnum bestPayTypeEnum) {
-//        if (bestPayTypeEnum.getPlatform().name().equals(PayPlatformEnum.ALIPAY.name())) {
-//            return PayPlatformEnum.ALIPAY;
-//        } else if (bestPayTypeEnum.getPlatform().name().equals(PayPlatformEnum.WX.name())) {
-//            return PayPlatformEnum.WX;
-//        }
-
         for (PayPlatformEnum payPlatformEnum : PayPlatformEnum.values()) {
             if (bestPayTypeEnum.getPlatform().name().equals(payPlatformEnum.name())) {
                 return payPlatformEnum;

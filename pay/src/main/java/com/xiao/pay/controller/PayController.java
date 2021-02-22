@@ -4,7 +4,7 @@ import com.lly835.bestpay.config.WxPayConfig;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayResponse;
 import com.xiao.pay.pojo.PayInfo;
-import com.xiao.pay.service.impl.PayService;
+import com.xiao.pay.service.impl.PayServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class PayController {
 
     @Autowired
-    private PayService payService;
+    private PayServiceImpl payServiceImpl;
 
     @Autowired
     private WxPayConfig wxPayConfig;
@@ -42,7 +42,7 @@ public class PayController {
                                @RequestParam("payType") BestPayTypeEnum bestPayTypeEnum
                                 ){
 
-        PayResponse response = payService.create(orderId, amount, bestPayTypeEnum);
+        PayResponse response = payServiceImpl.create(orderId, amount, bestPayTypeEnum);
 
         //支付方式不同，渲染不同，WXPAY_NATIVE使用codeUrl，ALIPAY_PC使用body
         Map<String,String> map = new HashMap<>();
@@ -65,7 +65,7 @@ public class PayController {
     @ResponseBody
     @PostMapping("/notify")
     public String asyncNotify(@RequestBody String notifyData) {
-        return   payService.asyncNotify(notifyData);
+        return   payServiceImpl.asyncNotify(notifyData);
     }
 
     /**
@@ -77,7 +77,7 @@ public class PayController {
     @GetMapping("/queryByOrderId")
     public PayInfo queryByOrderId(@RequestParam String orderId) {
         log.info("查询支付记录...");
-        return payService.queryByOrderId(orderId);
+        return payServiceImpl.queryByOrderId(orderId);
     }
 
 }
