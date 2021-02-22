@@ -2,6 +2,7 @@ package com.xiao.mall.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.xiao.mall.enums.ResponseEnum;
+import com.xiao.mall.pojo.Shipping;
 import lombok.Data;
 import org.springframework.validation.BindingResult;
 
@@ -35,6 +36,16 @@ public class ResponseVo<T> {
         this.data = data;
     }
 
+    public ResponseVo(Integer status, String msg, T data) {
+        this.status = status;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    public static <T> ResponseVo<T> success() {
+        return new ResponseVo<>(ResponseEnum.SUCCESS.getCode(), ResponseEnum.SUCCESS.getDesc());
+    }
+
     public static <T> ResponseVo<T> successByMsg(String msg) {
         return new ResponseVo<>(ResponseEnum.SUCCESS.getCode(), msg);
     }
@@ -43,9 +54,11 @@ public class ResponseVo<T> {
         return new ResponseVo<>(ResponseEnum.SUCCESS.getCode(), data);
     }
 
-    public static <T> ResponseVo<T> success() {
-        return new ResponseVo<>(ResponseEnum.SUCCESS.getCode(), ResponseEnum.SUCCESS.getDesc());
+    public static <T> ResponseVo<T> success(String msg,T data) {
+        return new ResponseVo<>(ResponseEnum.SUCCESS.getCode(), msg, data);
     }
+
+
 
     public static <T> ResponseVo<T> error(ResponseEnum responseEnum) {
         return new ResponseVo<>(responseEnum.getCode(), responseEnum.getDesc());
